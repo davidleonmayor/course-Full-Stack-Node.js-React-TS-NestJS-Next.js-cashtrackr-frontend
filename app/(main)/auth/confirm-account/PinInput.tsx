@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useFormState } from "react-dom";
 import { useRouter } from "next/navigation";
 import { confirmAccount } from "@/actions/confirm-account";
+import { toast } from "sonner";
 
 type Props = {
   length: number;
@@ -49,12 +50,20 @@ export function PinInput({ length = 6 }: Props) {
 
   useEffect(() => {
     if (state.success) {
+      toast.success(state.message || "Cuenta confirmada correctamente");
+
       const timer = setTimeout(() => {
         router.push("/login");
       }, 2000);
+
       return () => clearTimeout(timer);
+    } else if (state.errors?.token) {
+      toast.error(state.errors.token[0]);
+    } else if (state.message) {
+      setValues(Array(length).fill(""));
+      toast.error(state.message);
     }
-  }, [state.success, router]);
+  }, [state, router, length]);
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -78,7 +87,7 @@ export function PinInput({ length = 6 }: Props) {
         ))}
       </div>
 
-      {(state.errors?.token || state.message) && (
+      {/* {(state.errors?.token || state.message) && (
         <div
           className={`mt-4 p-3 rounded-lg ${
             state.success
@@ -88,7 +97,7 @@ export function PinInput({ length = 6 }: Props) {
         >
           {state.errors?.token?.[0] || state.message}
         </div>
-      )}
+      )} */}
     </div>
   );
 }

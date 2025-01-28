@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -16,7 +17,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-lt-installed>
-      <body className={outfit.className}>{children}</body>
+      <body className={outfit.className}>
+        <Toaster />
+        {children}
+      </body>
     </html>
   );
 }
