@@ -43,3 +43,7 @@ export const GenericErrorResponse = z.object({
     })
   ),
 });
+
+export const ConfirmAccount = z.object({
+  token: z.string().length(6, { message: "El token debe tener 6 dígitos" }),
+});

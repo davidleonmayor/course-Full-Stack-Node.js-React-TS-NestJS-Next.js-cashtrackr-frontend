@@ -43,6 +43,7 @@ export async function register(prevState: ActionStateType, formData: FormData) {
   });
 
   const json = await req.json();
+
   console.log(json); // Ver el formato de respuesta
 
   if (!req.ok) {
