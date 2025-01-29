@@ -44,6 +44,13 @@ export const GenericErrorResponse = z.object({
   ),
 });
 
+//  confirm account
 export const ConfirmAccount = z.object({
   token: z.string().length(6, { message: "El token debe tener 6 dígitos" }),
+});
+
+// login
+export const Login = z.object({
+  email: z.string().email({ message: "Email no válido" }),
+  password: z.string().min(8, { message: "El password es muy corto" }),
 });

@@ -2,9 +2,9 @@
 
 import { register } from "@/actions/auth";
 import { useFormState } from "react-dom";
-import ErrorMessage from "@/components/ui/auth/ErrorMessage";
-import SuccessMessage from "@/components/ui/auth/SuccessMessage";
-import { useRef } from "react";
+import ErrorMessage from "@/components/auth/ErrorMessage";
+import SuccessMessage from "@/components/auth/SuccessMessage";
+import { useEffect, useRef } from "react";
 
 export default function RegisterForm() {
   const ref = useRef<HTMLFormElement>(null);
@@ -13,11 +13,11 @@ export default function RegisterForm() {
     success: "",
   });
 
-  // useEffect(() => {
-  //   if (state.success) {
-  //     ref.current?.reset();
-  //   }
-  // }, [state]);
+  useEffect(() => {
+    if (state.success) {
+      ref.current?.reset();
+    }
+  }, [state]);
 
   return (
     <form ref={ref} className="mt-14 space-y-5" noValidate action={dispatch}>

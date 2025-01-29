@@ -1,55 +1,54 @@
 "use server";
-
-import { Register, SuccessResponse, GenericErrorResponse } from "@/zod/auth";
+import { cookies } from "next/headers";
+import { GenericErrorResponse, Login } from "@/zod/auth";
 
 type ActionStateType = {
   errors: string[];
   success: string;
 };
 
-export async function register(
-  prevState: ActionStateType,
+export async function authenticate(
+  revState: ActionStateType,
   formData: FormData
-): Promise<ActionStateType> {
-  const registerData = {
+) {
+  const loginCredentials = {
     email: formData.get("email"),
-    name: formData.get("name"),
     password: formData.get("password"),
-    password_confirmation: formData.get("password_confirmation"),
   };
 
-  const register = Register.safeParse(registerData);
-  if (!register.success) {
-    const errors = register.error.errors.map((error) => error.message);
+  const auth = Login.safeParse(loginCredentials);
+  if (!auth.success) {
+    const errors = auth.error.errors.map((error) => error.message);
     return {
       errors,
-      success: prevState.success,
+      success: "",
     };
   }
 
-  const url = `${process.env.API_URL}/auth/create-account`;
-  const req = await fetch(url, {
+  const req = await fetch(`${process.env.API_URL}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      name: register.data.name,
-      password: register.data.password,
-      email: register.data.email,
+      email: auth.data.email,
+      password: auth.data.password,
     }),
   });
 
   const json = await req.json();
-
-  console.log(json); // Ver el formato de respuesta
-
   if (!req.ok) {
-    if (req.status === 409) {
+    if (req.status === 400) {
       return {
-        errors: [json.error || "Este usuario ya está registrado"],
+        errors: ["Email o contraseña incorrectos"],
         success: "",
       };
+    }
+    if (req.status === 404) {
+      return { errors: ["Usuario no encontrado"], success: "" };
+    }
+    if (req.status === 403) {
+      return { errors: ["La Cuenta no ha sido confirmada"], success: "" };
     }
 
     // Intentar analizar con GenericErrorResponse
@@ -76,9 +75,16 @@ export async function register(
     };
   }
 
-  const success = SuccessResponse.parse(json);
+  // Setear Cookies
+  cookies().set({
+    name: "CASHTRACKR_TOKEN",
+    value: json,
+    httpOnly: true,
+    path: "/",
+  });
+
   return {
     errors: [],
-    success,
+    success: "User authenticated",
   };
 }

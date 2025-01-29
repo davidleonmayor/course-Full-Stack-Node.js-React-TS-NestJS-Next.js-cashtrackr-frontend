@@ -53,7 +53,7 @@ export function PinInput({ length = 6 }: Props) {
       toast.success(state.message || "Cuenta confirmada correctamente");
 
       const timer = setTimeout(() => {
-        router.push("/login");
+        router.push("/auth/login");
       }, 2000);
 
       return () => clearTimeout(timer);

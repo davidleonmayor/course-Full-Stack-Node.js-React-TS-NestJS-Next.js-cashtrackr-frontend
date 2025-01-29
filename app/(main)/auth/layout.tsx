@@ -1,4 +1,4 @@
-import Logo from "@/components/ui/Logo";
+import Logo from "@/components/Logo";
 import ToastNotification from "@/components/ui/ToastNotification";
 import Link from "next/link";
 

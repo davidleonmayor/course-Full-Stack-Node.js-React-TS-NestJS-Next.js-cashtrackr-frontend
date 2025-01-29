@@ -1,26 +1,43 @@
 "use client";
-// import { authenticate } from "@/actions/authenticate-user-action";
+import { authenticate } from "@/actions/authenticate-user";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useFormState } from "react-dom";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 export default function LoginForm() {
-  // const [state, dispatch] = useFormState(authenticate, {
-  //   errors: [],
-  // });
+  const router = useRouter();
+  const [state, dispatch] = useFormState(authenticate, {
+    errors: [],
+    success: "",
+  });
 
-  // useEffect(() => {
-  //   if (state.errors) {
-  //     state.errors.forEach((error) => {
-  //       toast.error(error);
-  //     });
-  //   }
-  // }, [state]);
+  useEffect(() => {
+    console.log("Estado actualizado:", state);
+
+    if (state.errors.length > 0) {
+      state.errors.forEach((error, index) => {
+        setTimeout(() => {
+          toast.error(error);
+        }, index * 100); // Agregar un pequeño delay para evitar conflictos
+      });
+    }
+
+    if (state.success) {
+      toast.success(state.success || "Autenticado correctamente");
+
+      const timer = setTimeout(() => {
+        console.log("Redireccionando a /admin...");
+        router.push("/admin");
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [state, router]);
 
   return (
     <>
-      {/* <form action={dispatch} className="mt-14 space-y-5" noValidate> */}
-      <form className="mt-14 space-y-5" noValidate>
+      <form action={dispatch} className="mt-14 space-y-5" noValidate>
         <div className="flex flex-col gap-2">
           <label className="font-bold text-2xl">Email</label>
 
