@@ -13,8 +13,6 @@ export default function LoginForm() {
   });
 
   useEffect(() => {
-    console.log("Estado actualizado:", state);
-
     if (state.errors.length > 0) {
       state.errors.forEach((error, index) => {
         setTimeout(() => {
@@ -27,7 +25,7 @@ export default function LoginForm() {
       toast.success(state.success || "Autenticado correctamente");
 
       const timer = setTimeout(() => {
-        console.log("Redireccionando a /admin...");
+        // console.log("Redireccionando a /admin...");
         router.push("/admin");
       }, 2000);
 

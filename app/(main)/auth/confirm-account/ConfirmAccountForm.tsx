@@ -1,5 +1,5 @@
 "use client";
-import { PinInput } from "./PinInput";
+import { PinInput } from "@/components/auth/PinInput";
 
 export default function ConfirmAccountForm() {
   return (

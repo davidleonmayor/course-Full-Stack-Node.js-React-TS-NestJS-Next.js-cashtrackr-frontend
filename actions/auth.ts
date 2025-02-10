@@ -42,7 +42,7 @@ export async function register(
 
   const json = await req.json();
 
-  console.log(json); // Ver el formato de respuesta
+  // console.log(json);
 
   if (!req.ok) {
     if (req.status === 409) {

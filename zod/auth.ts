@@ -54,3 +54,20 @@ export const Login = z.object({
   email: z.string().email({ message: "Email no válido" }),
   password: z.string().min(8, { message: "El password es muy corto" }),
 });
+
+// Autorization
+export const UserSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  email: z.string().email(),
+});
+
+// forgot password
+export const emailSchema = z.object({
+  email: z.string().email({ message: "Email no válido" }),
+});
+
+// validate token
+export const ValidateToken = z.object({
+  token: z.string().length(6, { message: "El token debe tener 6 dígitos" }),
+});
